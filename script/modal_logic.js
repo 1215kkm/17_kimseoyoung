@@ -53,6 +53,9 @@ function openGraphicModal(card) {
 
     // Prevent background scrolling
     document.body.style.overflow = 'hidden';
+    // normalScrollElements 영역의 네이티브 스크롤도 차단
+    var scrollArea = document.querySelector('.graphic-archive-wrapper');
+    if (scrollArea) scrollArea.style.overflow = 'hidden';
     // Prevent fullpage.js section scrolling
     if (window.fullpage_api) {
         fullpage_api.setAllowScrolling(false);
@@ -67,6 +70,8 @@ function closeGraphicModal() {
     }
     // Restore scrolling
     document.body.style.overflow = '';
+    var scrollArea = document.querySelector('.graphic-archive-wrapper');
+    if (scrollArea) scrollArea.style.overflow = '';
     if (window.fullpage_api) {
         fullpage_api.setAllowScrolling(true);
         fullpage_api.setKeyboardScrolling(true);
