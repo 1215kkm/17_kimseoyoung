@@ -678,49 +678,49 @@
         }
 
 
-        /* 3. 주변 데이터 패널 (공통 스타일) */
-        .data-panel {
+        /* 3. 패널 zone (고정 위치 부모) */
+        .panel-zone {
             position: absolute;
-            background: rgba(20, 20, 25, 0.7);
-            /* 반투명 어두운 배경 */
-            border: 1px solid rgba(248, 248, 248, 0.3);
-            /* 네온 보더 */
-            padding: clamp(8px, 1.25vw, 15px);
-            /* Reduced padding by 15% to prevent scrolling */
-            backdrop-filter: blur(10px);
-            /* 유리 효과 */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             width: clamp(260px, 22vw, 400px);
-            /* Refined fluid width to prevent overflow */
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* 부드러운 탄성 효과 */
             z-index: 5;
         }
 
-        .data-panel:hover {
+        /* 3-1. 데이터 패널 (비주얼 스타일) */
+        .data-panel {
+            background: rgba(20, 20, 25, 0.7);
+            border: 1px solid rgba(248, 248, 248, 0.3);
+            padding: clamp(8px, 1.25vw, 15px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.4s ease,
+                border-color 0.4s ease,
+                background 0.4s ease;
+            box-sizing: border-box;
+        }
+
+        .panel-zone:hover .data-panel {
             border-color: rgb(238, 238, 238);
             box-shadow: 0 0 30px rgba(228, 228, 228, 0.4);
             background: rgba(30, 30, 35, 0.95);
         }
 
         /* 호버 시 중앙으로 연결되는 레이저 라인 생성 */
-        .data-panel::before {
+        .panel-zone::before {
             content: '';
             position: absolute;
             width: 0;
-            /* 평소엔 길이 0 */
             height: 2px;
             background: linear-gradient(90deg, rgb(233, 233, 233) 0%, transparent 100%);
             top: 50%;
             transition: width 0.4s ease 0.1s;
-            /* 살짝 늦게 나옴 */
             pointer-events: none;
             box-shadow: 0 0 10px rgba(231, 231, 231, 0.8);
         }
 
-        .data-panel:hover::before {
+        .panel-zone:hover::before {
             width: 300px;
-            /* 호버 시 라인 길어짐 (거리 조절 필요 시 수정) */
         }
 
 
@@ -915,31 +915,24 @@
                 padding-bottom: 40px;
             }
 
-            .data-panel {
+            .panel-zone {
                 position: relative !important;
                 top: auto !important;
                 left: auto !important;
                 right: auto !important;
                 bottom: auto !important;
                 width: 100% !important;
+            }
+
+            .data-panel {
+                width: 100% !important;
                 max-width: none !important;
                 margin-bottom: 0;
                 transform: none !important;
             }
 
-            .data-panel::before {
+            .panel-zone::before {
                 display: none;
-                /* Hide laser lines on mobile/tablet */
-            }
-
-            .panel-tl,
-            .panel-bl,
-            .panel-tr,
-            .panel-br {
-                top: auto;
-                left: auto;
-                right: auto;
-                bottom: auto;
             }
         }
 
@@ -2457,8 +2450,11 @@
 
         /* Mid-range screens (2560px and below) */
         @media (max-width: 2560px) {
-            .data-panel {
+            .panel-zone {
                 max-width: 320px;
+            }
+
+            .data-panel {
                 padding: 30px;
             }
 
@@ -2497,11 +2493,8 @@
                 gap: clamp(20px, 3.5vh, 40px);
                 /* Optimized spacing */
 
-                /* SCROLL ENGINE REMOVED */
-                height: 100%;
-                /* Fill the frame */
-                overflow: hidden !important;
-                /* Ensure no scroll */
+                /* flex: 1으로 ui-bar 사이의 남은 공간만 채움 */
+                overflow: visible;
                 align-content: center;
                 /* Center vertically */
                 align-items: stretch;
@@ -2534,42 +2527,41 @@
                 margin: auto;
             }
 
-            /* Reset Panel Positioning for Grid */
-            .data-panel {
+            /* Zone: grid item */
+            .panel-zone {
                 position: relative !important;
                 top: auto !important;
                 left: auto !important;
                 right: auto !important;
                 bottom: auto !important;
+                width: 100% !important;
+            }
+
+            /* Panel: fill zone */
+            .data-panel {
                 width: 100%;
                 max-width: 100% !important;
                 margin: 0 !important;
                 background: rgba(20, 20, 25, 0.85);
                 height: 100% !important;
-                /* Force fill grid cell for equal height */
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
-                /* Content starts at top */
                 padding: 25px 35px !important;
-                /* Comfortable padding */
             }
 
-            /* Assign Grid Positions */
+            /* Grid Positions (on .panel-zone) */
             .panel-tl {
                 grid-column: 1;
                 grid-row: 1;
                 align-self: end;
             }
 
-            /* Push top panels down towards center */
             .panel-bl {
                 grid-column: 1;
                 grid-row: 2;
                 align-self: start;
             }
-
-            /* Push bottom panels up towards center */
 
             .panel-tr {
                 grid-column: 3;
@@ -2583,21 +2575,9 @@
                 align-self: start;
             }
 
-            /* Hide Laser Lines in Grid Mode (Clean UI) */
-            .data-panel::before,
-            .panel-tl::before,
-            .panel-bl::before,
-            .panel-tr::before,
-            .panel-br::before {
+            /* Hide Laser Lines in Grid Mode */
+            .panel-zone::before {
                 display: none !important;
-            }
-
-            /* Panel transition for center-zoom hover */
-            .data-panel {
-                transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                    box-shadow 0.4s ease,
-                    border-color 0.4s ease,
-                    background 0.4s ease !important;
             }
         }
 
@@ -2641,10 +2621,12 @@
             }
 
             /* About Me Panel Size Enhancement for 4K */
-            .data-panel {
+            .panel-zone {
                 max-width: 450px;
+            }
+
+            .data-panel {
                 padding: 30px;
-                /* Tightened from 40px */
             }
 
             /* Description Visibility - Remove Toggle Interaction */
@@ -3047,7 +3029,8 @@
 
                     <div class="about-panels-wrapper" style="display: contents;">
                         <!-- 1. [Top-Left] PROFILE -->
-                        <div class="data-panel panel-tl">
+                        <div class="panel-zone panel-tl">
+                        <div class="data-panel">
                             <h2 class="panel-label"><span class="ins-tag">::</span> PROFILE <span
                                     class="header-sub-ko">인적사항</span></h2>
                             <div class="panel-text"
@@ -3063,9 +3046,11 @@
                                 </span>
                             </div>
                         </div>
+                        </div>
 
                         <!-- 2. [Bottom-Left] TOOL_SET_LOG -->
-                        <div class="data-panel panel-bl">
+                        <div class="panel-zone panel-bl">
+                        <div class="data-panel">
                             <h3 class="panel-label"><span class="ins-tag">::</span> TOOL SET <span
                                     class="header-sub-ko">보유 기술</span></h3>
                             <div class="tool-group">
@@ -3117,9 +3102,11 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
 
                         <!-- 3. [Top-Right] SYSTEM_DATA_LOG (Radar Chart) -->
-                        <div class="data-panel panel-tr">
+                        <div class="panel-zone panel-tr">
+                        <div class="data-panel">
                             <h3 class="panel-label"><span class="ins-tag">::</span> STATISTICS <span
                                     class="header-sub-ko">업무 역량</span></h3>
                             <div class="radar-chart-container">
@@ -3151,9 +3138,11 @@
                                 <span class="ai-badge" style="font-size: 0.85rem;">Ideogram</span>
                             </div>
                         </div>
+                        </div>
 
                         <!-- 4. [Bottom-Right] EXP. LOG -->
-                        <div class="data-panel panel-br">
+                        <div class="panel-zone panel-br">
+                        <div class="data-panel">
                             <h3 class="panel-label"><span class="ins-tag">::</span> EXPERIENCE <span
                                     class="header-sub-ko">경력 사항</span></h3>
                             <ul class="exp-list" style="padding:0; margin:0;">
@@ -3178,6 +3167,7 @@
                                     <span class="exp-content">상세페이지, 썸네일 제작</span>
                                 </li>
                             </ul>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -5021,71 +5011,34 @@
     <script src="script/desc_toggle.js"></script>
     <script>
         // Panel center-zoom hover effect
+        // 고정된 .panel-zone 부모에서 hover 감지 → 안의 .data-panel만 이동
         (function () {
             var layout = document.querySelector('.about-hologram-layout');
             if (!layout) return;
 
             var dim = layout.querySelector('.panel-hover-dim');
-            var panels = layout.querySelectorAll('.data-panel');
-            var activePanel = null;
-            var tracker = null;
+            var zones = layout.querySelectorAll('.panel-zone');
 
-            function isOverRect(el, x, y) {
-                var r = el.getBoundingClientRect();
-                return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
-            }
+            zones.forEach(function (zone) {
+                var panel = zone.querySelector('.data-panel');
+                if (!panel) return;
 
-            function closePanel() {
-                if (!activePanel) return;
-                activePanel.style.transform = '';
-                activePanel.style.zIndex = '';
-                activePanel.classList.remove('panel-centered');
-                dim.classList.remove('active');
-                activePanel = null;
-                if (tracker) {
-                    document.removeEventListener('mousemove', tracker);
-                    tracker = null;
-                }
-            }
-
-            panels.forEach(function (panel) {
-                panel.addEventListener('mouseenter', function () {
-                    if (activePanel === this) return;
-                    if (activePanel) closePanel();
-
-                    var rect = this.getBoundingClientRect();
+                zone.addEventListener('mouseenter', function () {
+                    var rect = panel.getBoundingClientRect();
                     var dx = window.innerWidth / 2 - (rect.left + rect.width / 2);
                     var dy = window.innerHeight / 2 - (rect.top + rect.height / 2);
 
-                    this.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(1.15)';
-                    this.style.zIndex = '100';
-                    this.classList.add('panel-centered');
+                    panel.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(1.15)';
+                    panel.style.zIndex = '100';
+                    panel.classList.add('panel-centered');
                     dim.classList.add('active');
-                    activePanel = this;
                 });
 
-                panel.addEventListener('mouseleave', function (e) {
-                    if (activePanel !== this) return;
-
-                    // getBoundingClientRect는 transform 적용 후 시각적 위치를 반환
-                    // 마우스가 이동된 패널 위에 있으면 닫지 않고 추적 시작
-                    if (isOverRect(this, e.clientX, e.clientY)) {
-                        if (tracker) document.removeEventListener('mousemove', tracker);
-                        tracker = function (ev) {
-                            if (!activePanel) {
-                                document.removeEventListener('mousemove', tracker);
-                                tracker = null;
-                                return;
-                            }
-                            if (!isOverRect(activePanel, ev.clientX, ev.clientY)) {
-                                closePanel();
-                            }
-                        };
-                        document.addEventListener('mousemove', tracker);
-                        return;
-                    }
-
-                    closePanel();
+                zone.addEventListener('mouseleave', function () {
+                    panel.style.transform = '';
+                    panel.style.zIndex = '';
+                    panel.classList.remove('panel-centered');
+                    dim.classList.remove('active');
                 });
             });
         })();
