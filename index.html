@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Ethereal Tech</title>
 
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/profile2.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="김서영 포트폴리오">
+    <meta name="theme-color" content="#0a0a0a">
+
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/font.css">
     <link rel="stylesheet" href="css/style.css">
@@ -5046,6 +5052,89 @@
                     dim.classList.remove('active');
                 });
             });
+        })();
+    </script>
+
+    <!-- 모바일 앱 설치 플로팅 버튼 -->
+    <button id="pwa-install-btn" class="pwa-install-btn" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        앱설치
+    </button>
+    <style>
+        .pwa-install-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            background: rgba(20, 20, 25, 0.9);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+        .pwa-install-btn:hover {
+            background: rgba(40, 40, 50, 0.95);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 25px rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        /* 데스크톱에서 숨김 */
+        @media (min-width: 769px) {
+            .pwa-install-btn { display: none !important; }
+        }
+    </style>
+    <script>
+        // PWA Install prompt
+        (function () {
+            var deferredPrompt = null;
+            var installBtn = document.getElementById('pwa-install-btn');
+
+            window.addEventListener('beforeinstallprompt', function (e) {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (installBtn) installBtn.style.display = 'flex';
+            });
+
+            if (installBtn) {
+                installBtn.addEventListener('click', function () {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then(function () {
+                            deferredPrompt = null;
+                            installBtn.style.display = 'none';
+                        });
+                    } else {
+                        // iOS Safari 등 beforeinstallprompt 미지원 브라우저
+                        alert('홈 화면에 추가하려면:\n브라우저 공유 버튼(↑) → "홈 화면에 추가"를 눌러주세요.');
+                    }
+                });
+            }
+
+            // 이미 설치된 경우 버튼 숨김
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                if (installBtn) installBtn.style.display = 'none';
+            }
+
+            // iOS에서는 beforeinstallprompt가 없으므로 직접 표시
+            var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            var isStandalone = window.navigator.standalone === true;
+            if (isIOS && !isStandalone && installBtn) {
+                installBtn.style.display = 'flex';
+            }
         })();
     </script>
 </body>

@@ -53,6 +53,11 @@ function openGraphicModal(card) {
 
     // Prevent background scrolling
     document.body.style.overflow = 'hidden';
+    // Prevent fullpage.js section scrolling
+    if (window.fullpage_api) {
+        fullpage_api.setAllowScrolling(false);
+        fullpage_api.setKeyboardScrolling(false);
+    }
 }
 
 function closeGraphicModal() {
@@ -62,6 +67,10 @@ function closeGraphicModal() {
     }
     // Restore scrolling
     document.body.style.overflow = '';
+    if (window.fullpage_api) {
+        fullpage_api.setAllowScrolling(true);
+        fullpage_api.setKeyboardScrolling(true);
+    }
 }
 
 // Close modal when clicking outside content
