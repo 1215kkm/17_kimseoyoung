@@ -639,6 +639,68 @@ body {
     color: #fff;
 }
 
+/* 카테고리 호버 썸네일 */
+.index-thumbnails {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 20px;
+    pointer-events: none;
+}
+
+.index-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.index-item:hover .index-thumb:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0s;
+}
+
+.index-item:hover .index-thumb:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.08s;
+}
+
+.index-item:hover .index-thumb:nth-child(3) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.16s;
+}
+
+.index-item:hover .index-thumb:nth-child(4) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.24s;
+}
+
+/* 호버 해제 시 역순 사라짐 */
+.index-thumb:nth-child(1) {
+    transition-delay: 0.18s;
+}
+
+.index-thumb:nth-child(2) {
+    transition-delay: 0.12s;
+}
+
+.index-thumb:nth-child(3) {
+    transition-delay: 0.06s;
+}
+
+.index-thumb:nth-child(4) {
+    transition-delay: 0s;
+}
+
 
 /* 레이어 중첩 레이아웃 스타일 */
 .layered-content {
