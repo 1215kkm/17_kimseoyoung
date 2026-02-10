@@ -684,36 +684,29 @@
         }
 
 
-        /* 3. 패널 zone (고정 위치 부모) */
-        .panel-zone {
-            position: absolute;
-            width: clamp(260px, 22vw, 400px);
-            z-index: 5;
-        }
-
-        /* 3-1. 데이터 패널 (비주얼 스타일) */
+        /* 3. 주변 데이터 패널 (공통 스타일) */
         .data-panel {
+            position: absolute;
             background: rgba(20, 20, 25, 0.7);
             border: 1px solid rgba(248, 248, 248, 0.3);
             padding: clamp(8px, 1.25vw, 15px);
             backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                box-shadow 0.4s ease,
-                border-color 0.4s ease,
-                background 0.4s ease;
-            box-sizing: border-box;
+            width: clamp(260px, 22vw, 400px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5;
         }
 
-        .panel-zone:hover .data-panel {
+        .data-panel:hover {
             border-color: rgb(238, 238, 238);
             box-shadow: 0 0 30px rgba(228, 228, 228, 0.4);
             background: rgba(30, 30, 35, 0.95);
+            transform: scale(1.1);
+            z-index: 20;
         }
 
         /* 호버 시 중앙으로 연결되는 레이저 라인 생성 */
-        .panel-zone::before {
+        .data-panel::before {
             content: '';
             position: absolute;
             width: 0;
@@ -725,7 +718,7 @@
             box-shadow: 0 0 10px rgba(231, 231, 231, 0.8);
         }
 
-        .panel-zone:hover::before {
+        .data-panel:hover::before {
             width: 300px;
         }
 
@@ -921,24 +914,31 @@
                 padding-bottom: 40px;
             }
 
-            .panel-zone {
+            .data-panel {
                 position: relative !important;
                 top: auto !important;
                 left: auto !important;
                 right: auto !important;
                 bottom: auto !important;
                 width: 100% !important;
-            }
-
-            .data-panel {
-                width: 100% !important;
                 max-width: none !important;
                 margin-bottom: 0;
                 transform: none !important;
             }
 
-            .panel-zone::before {
+            .data-panel::before {
                 display: none;
+                /* Hide laser lines on mobile/tablet */
+            }
+
+            .panel-tl,
+            .panel-bl,
+            .panel-tr,
+            .panel-br {
+                top: auto;
+                left: auto;
+                right: auto;
+                bottom: auto;
             }
         }
 
@@ -2456,11 +2456,8 @@
 
         /* Mid-range screens (2560px and below) */
         @media (max-width: 2560px) {
-            .panel-zone {
-                max-width: 320px;
-            }
-
             .data-panel {
+                max-width: 320px;
                 padding: 30px;
             }
 
@@ -2499,8 +2496,11 @@
                 gap: clamp(20px, 3.5vh, 40px);
                 /* Optimized spacing */
 
-                /* flex: 1으로 ui-bar 사이의 남은 공간만 채움 */
-                overflow: visible;
+                /* SCROLL ENGINE REMOVED */
+                height: 100%;
+                /* Fill the frame */
+                overflow: hidden !important;
+                /* Ensure no scroll */
                 align-content: center;
                 /* Center vertically */
                 align-items: stretch;
@@ -2533,41 +2533,42 @@
                 margin: auto;
             }
 
-            /* Zone: grid item */
-            .panel-zone {
+            /* Reset Panel Positioning for Grid */
+            .data-panel {
                 position: relative !important;
                 top: auto !important;
                 left: auto !important;
                 right: auto !important;
                 bottom: auto !important;
-                width: 100% !important;
-            }
-
-            /* Panel: fill zone */
-            .data-panel {
                 width: 100%;
                 max-width: 100% !important;
                 margin: 0 !important;
                 background: rgba(20, 20, 25, 0.85);
                 height: 100% !important;
+                /* Force fill grid cell for equal height */
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
+                /* Content starts at top */
                 padding: 25px 35px !important;
+                /* Comfortable padding */
             }
 
-            /* Grid Positions (on .panel-zone) */
+            /* Assign Grid Positions */
             .panel-tl {
                 grid-column: 1;
                 grid-row: 1;
                 align-self: end;
             }
 
+            /* Push top panels down towards center */
             .panel-bl {
                 grid-column: 1;
                 grid-row: 2;
                 align-self: start;
             }
+
+            /* Push bottom panels up towards center */
 
             .panel-tr {
                 grid-column: 3;
@@ -2581,9 +2582,20 @@
                 align-self: start;
             }
 
-            /* Hide Laser Lines in Grid Mode */
-            .panel-zone::before {
+            /* Hide Laser Lines in Grid Mode (Clean UI) */
+            .data-panel::before,
+            .panel-tl::before,
+            .panel-bl::before,
+            .panel-tr::before,
+            .panel-br::before {
                 display: none !important;
+            }
+
+            /* Adjust Hover for Grid */
+            .data-panel:hover {
+                transform: translateY(-5px) !important;
+                z-index: 10;
+                box-shadow: 0 10px 40px rgba(122, 122, 122, 0.2);
             }
         }
 
@@ -2627,12 +2639,10 @@
             }
 
             /* About Me Panel Size Enhancement for 4K */
-            .panel-zone {
-                max-width: 450px;
-            }
-
             .data-panel {
+                max-width: 450px;
                 padding: 30px;
+                /* Tightened from 40px */
             }
 
             /* Description Visibility - Remove Toggle Interaction */
@@ -2999,39 +3009,7 @@
                             display: block;
                             letter-spacing: -0.3px;
                         }
-
-                        /* Panel center-zoom hover */
-                        .panel-hover-dim {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 100%;
-                            background: rgba(0, 0, 0, 0.55);
-                            opacity: 0;
-                            pointer-events: none;
-                            transition: opacity 0.4s ease;
-                            z-index: 60;
-                        }
-
-                        .panel-hover-dim.active {
-                            opacity: 1;
-                        }
-
-                        /* 딤 활성화 시 캐릭터를 딤 위로 */
-                        .panel-hover-dim.active ~ .avatar-center-stage {
-                            z-index: 70;
-                        }
-
-                        .data-panel.panel-centered {
-                            border-color: #fff !important;
-                            box-shadow: 0 0 50px rgba(255, 255, 255, 0.3) !important;
-                            background: rgba(25, 25, 30, 0.98) !important;
-                            z-index: 100 !important;
-                        }
                     </style>
-
-                    <div class="panel-hover-dim"></div>
 
                     <div class="avatar-center-stage">
                         <img src="images/profile2.png" alt="김서영 아바타" class="holo-avatar-img">
@@ -3040,8 +3018,7 @@
 
                     <div class="about-panels-wrapper" style="display: contents;">
                         <!-- 1. [Top-Left] PROFILE -->
-                        <div class="panel-zone panel-tl">
-                        <div class="data-panel">
+                        <div class="data-panel panel-tl">
                             <h2 class="panel-label"><span class="ins-tag">::</span> PROFILE <span
                                     class="header-sub-ko">인적사항</span></h2>
                             <div class="panel-text"
@@ -3057,11 +3034,9 @@
                                 </span>
                             </div>
                         </div>
-                        </div>
 
                         <!-- 2. [Bottom-Left] TOOL_SET_LOG -->
-                        <div class="panel-zone panel-bl">
-                        <div class="data-panel">
+                        <div class="data-panel panel-bl">
                             <h3 class="panel-label"><span class="ins-tag">::</span> TOOL SET <span
                                     class="header-sub-ko">보유 기술</span></h3>
                             <div class="tool-group">
@@ -3113,11 +3088,9 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
 
                         <!-- 3. [Top-Right] SYSTEM_DATA_LOG (Radar Chart) -->
-                        <div class="panel-zone panel-tr">
-                        <div class="data-panel">
+                        <div class="data-panel panel-tr">
                             <h3 class="panel-label"><span class="ins-tag">::</span> STATISTICS <span
                                     class="header-sub-ko">업무 역량</span></h3>
                             <div class="radar-chart-container">
@@ -3149,11 +3122,9 @@
                                 <span class="ai-badge" style="font-size: 0.85rem;">Ideogram</span>
                             </div>
                         </div>
-                        </div>
 
                         <!-- 4. [Bottom-Right] EXP. LOG -->
-                        <div class="panel-zone panel-br">
-                        <div class="data-panel">
+                        <div class="data-panel panel-br">
                             <h3 class="panel-label"><span class="ins-tag">::</span> EXPERIENCE <span
                                     class="header-sub-ko">경력 사항</span></h3>
                             <ul class="exp-list" style="padding:0; margin:0;">
@@ -3178,7 +3149,6 @@
                                     <span class="exp-content">상세페이지, 썸네일 제작</span>
                                 </li>
                             </ul>
-                        </div>
                         </div>
                     </div>
                 </div>
@@ -5044,40 +5014,6 @@
     <script src="script/bg_3d_stars.js"></script>
     <script src="script/move_ai_section.js"></script>
     <script src="script/desc_toggle.js"></script>
-    <script>
-        // Panel center-zoom hover effect
-        // 고정된 .panel-zone 부모에서 hover 감지 → 안의 .data-panel만 이동
-        (function () {
-            var layout = document.querySelector('.about-hologram-layout');
-            if (!layout) return;
-
-            var dim = layout.querySelector('.panel-hover-dim');
-            var zones = layout.querySelectorAll('.panel-zone');
-
-            zones.forEach(function (zone) {
-                var panel = zone.querySelector('.data-panel');
-                if (!panel) return;
-
-                zone.addEventListener('mouseenter', function () {
-                    var rect = panel.getBoundingClientRect();
-                    var dx = window.innerWidth / 2 - (rect.left + rect.width / 2);
-                    var dy = window.innerHeight / 2 - (rect.top + rect.height / 2);
-
-                    panel.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(1.15)';
-                    panel.style.zIndex = '100';
-                    panel.classList.add('panel-centered');
-                    dim.classList.add('active');
-                });
-
-                zone.addEventListener('mouseleave', function () {
-                    panel.style.transform = '';
-                    panel.style.zIndex = '';
-                    panel.classList.remove('panel-centered');
-                    dim.classList.remove('active');
-                });
-            });
-        })();
-    </script>
 
     <!-- 모바일 앱 설치 플로팅 버튼 -->
     <button id="pwa-install-btn" class="pwa-install-btn" style="display:none;">
