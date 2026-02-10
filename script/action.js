@@ -694,9 +694,8 @@ function triggerNextFileActivation() {
    fullPage.js의 섹션 이동이 작동하도록 제어
 ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    // 제어할 컨테이너 목록
+    // 제어할 컨테이너 목록 (내부 스크롤이 실제로 필요한 영역만)
     const scrollContainers = [
-        '.about-hologram-layout',
         '.graphic-archive-wrapper',
         '.terminal-content'
     ];

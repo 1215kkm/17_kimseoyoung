@@ -5028,14 +5028,30 @@
             var dim = layout.querySelector('.panel-hover-dim');
             var panels = layout.querySelectorAll('.data-panel');
             var activePanel = null;
+            var tracker = null;
+
+            function isOverRect(el, x, y) {
+                var r = el.getBoundingClientRect();
+                return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+            }
+
+            function closePanel() {
+                if (!activePanel) return;
+                activePanel.style.transform = '';
+                activePanel.style.zIndex = '';
+                activePanel.classList.remove('panel-centered');
+                dim.classList.remove('active');
+                activePanel = null;
+                if (tracker) {
+                    document.removeEventListener('mousemove', tracker);
+                    tracker = null;
+                }
+            }
 
             panels.forEach(function (panel) {
                 panel.addEventListener('mouseenter', function () {
-                    if (activePanel && activePanel !== this) {
-                        activePanel.style.transform = '';
-                        activePanel.style.zIndex = '';
-                        activePanel.classList.remove('panel-centered');
-                    }
+                    if (activePanel === this) return;
+                    if (activePanel) closePanel();
 
                     var rect = this.getBoundingClientRect();
                     var dx = window.innerWidth / 2 - (rect.left + rect.width / 2);
@@ -5048,12 +5064,28 @@
                     activePanel = this;
                 });
 
-                panel.addEventListener('mouseleave', function () {
-                    this.style.transform = '';
-                    this.style.zIndex = '';
-                    this.classList.remove('panel-centered');
-                    dim.classList.remove('active');
-                    activePanel = null;
+                panel.addEventListener('mouseleave', function (e) {
+                    if (activePanel !== this) return;
+
+                    // getBoundingClientRect는 transform 적용 후 시각적 위치를 반환
+                    // 마우스가 이동된 패널 위에 있으면 닫지 않고 추적 시작
+                    if (isOverRect(this, e.clientX, e.clientY)) {
+                        if (tracker) document.removeEventListener('mousemove', tracker);
+                        tracker = function (ev) {
+                            if (!activePanel) {
+                                document.removeEventListener('mousemove', tracker);
+                                tracker = null;
+                                return;
+                            }
+                            if (!isOverRect(activePanel, ev.clientX, ev.clientY)) {
+                                closePanel();
+                            }
+                        };
+                        document.addEventListener('mousemove', tracker);
+                        return;
+                    }
+
+                    closePanel();
                 });
             });
         })();
