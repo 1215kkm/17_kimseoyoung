@@ -598,7 +598,6 @@
 
         .section {
             height: 100vh;
-            height: 100dvh;
         }
 
 
@@ -609,8 +608,7 @@
         .about-hologram-layout {
             position: relative;
             width: 100%;
-            flex: 1;
-            min-height: 0;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -2502,7 +2500,9 @@
                 gap: clamp(20px, 3.5vh, 40px);
                 /* Optimized spacing */
 
-                /* flex: 1으로 ui-bar 사이의 남은 공간만 채움 */
+                /* SCROLL ENGINE REMOVED */
+                height: 100%;
+                /* Fill the frame */
                 overflow: hidden !important;
                 /* Ensure no scroll */
                 align-content: center;
@@ -3180,12 +3180,6 @@
                                 <h3 class="index-name">WEB DESIGN</h3>
                                 <p class="index-desc">심미적 가치와 사용성을 결합한 웹 설계</p>
                             </div>
-                            <div class="index-thumbnails">
-                                <img class="index-thumb" src="images/DUSTLINE.jpg" alt="DUSTLINE">
-                                <img class="index-thumb" src="images/waversa.jpg" alt="WAVERSA">
-                                <img class="index-thumb" src="images/artecenter.jpg" alt="ARTE CENTER">
-                                <img class="index-thumb" src="images/sweetblanc.jpg" alt="SWEET BLANC">
-                            </div>
                             <span class="index-arrow">→</span>
                         </div>
 
@@ -3194,12 +3188,6 @@
                             <div class="index-text">
                                 <h3 class="index-name">GRAPHIC DESIGN</h3>
                                 <p class="index-desc">커머셜 아트워크 및 다분야 그래픽 에셋</p>
-                            </div>
-                            <div class="index-thumbnails">
-                                <img class="index-thumb" src="images/poster1.png" alt="POSTER">
-                                <img class="index-thumb" src="images/broche-01.png" alt="BROCHURE">
-                                <img class="index-thumb" src="images/commercial1.png" alt="COMMERCIAL">
-                                <img class="index-thumb" src="images/banner1.png" alt="BANNER">
                             </div>
                             <span class="index-arrow">→</span>
                         </div>
@@ -3210,12 +3198,6 @@
                                 <h3 class="index-name">TEAM PROJECT</h3>
                                 <p class="index-desc">협업 시너지를 통한 웹 서비스 분석 및 리디자인</p>
                             </div>
-                            <div class="index-thumbnails">
-                                <img class="index-thumb" src="images/team.png" alt="TEAM">
-                                <img class="index-thumb" src="images/teammokup.png" alt="TEAM MOCKUP">
-                                <img class="index-thumb" src="images/5.png" alt="PROJECT 1">
-                                <img class="index-thumb" src="images/6.png" alt="PROJECT 2">
-                            </div>
                             <span class="index-arrow">→</span>
                         </div>
 
@@ -3224,12 +3206,6 @@
                             <div class="index-text">
                                 <h3 class="index-name">AI PROJECT</h3>
                                 <p class="index-desc">AI 협업 기반의 하이브리드 웹 프로젝트</p>
-                            </div>
-                            <div class="index-thumbnails">
-                                <img class="index-thumb" src="images/1.png" alt="AI 1">
-                                <img class="index-thumb" src="images/2.png" alt="AI 2">
-                                <img class="index-thumb" src="images/3.png" alt="AI 3">
-                                <img class="index-thumb" src="images/4.png" alt="AI 4">
                             </div>
                             <span class="index-arrow">→</span>
                         </div>
