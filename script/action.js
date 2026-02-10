@@ -51,7 +51,7 @@ new fullpage('#fullpage', {
 
     // [중요] 특정 요소 내부에서만 스크롤이 작동하게 하려면 여기 등록하여 
     // fullpage.js가 이 영역의 이벤트를 하이재킹하지 않도록 합니다.
-    normalScrollElements: '.about-hologram-layout, .graphic-archive-wrapper, .terminal-content',
+    normalScrollElements: '.graphic-archive-wrapper, .terminal-content',
 
 
     fitToSection: true,

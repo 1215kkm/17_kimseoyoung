@@ -701,9 +701,6 @@
             border-color: rgb(238, 238, 238);
             box-shadow: 0 0 30px rgba(228, 228, 228, 0.4);
             background: rgba(30, 30, 35, 0.95);
-            transform: scale(1.1);
-            /* 호버 시 확대 */
-            z-index: 20;
         }
 
         /* 호버 시 중앙으로 연결되는 레이저 라인 생성 */
@@ -2595,11 +2592,12 @@
                 display: none !important;
             }
 
-            /* Adjust Hover for Grid */
-            .data-panel:hover {
-                transform: translateY(-5px) !important;
-                z-index: 10;
-                box-shadow: 0 10px 40px rgba(122, 122, 122, 0.2);
+            /* Panel transition for center-zoom hover */
+            .data-panel {
+                transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    box-shadow 0.4s ease,
+                    border-color 0.4s ease,
+                    background 0.4s ease !important;
             }
         }
 
@@ -3013,7 +3011,34 @@
                             display: block;
                             letter-spacing: -0.3px;
                         }
+
+                        /* Panel center-zoom hover */
+                        .panel-hover-dim {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(0, 0, 0, 0.55);
+                            opacity: 0;
+                            pointer-events: none;
+                            transition: opacity 0.4s ease;
+                            z-index: 60;
+                        }
+
+                        .panel-hover-dim.active {
+                            opacity: 1;
+                        }
+
+                        .data-panel.panel-centered {
+                            border-color: #fff !important;
+                            box-shadow: 0 0 50px rgba(255, 255, 255, 0.3) !important;
+                            background: rgba(25, 25, 30, 0.98) !important;
+                            z-index: 100 !important;
+                        }
                     </style>
+
+                    <div class="panel-hover-dim"></div>
 
                     <div class="avatar-center-stage">
                         <img src="images/profile2.png" alt="김서영 아바타" class="holo-avatar-img">
@@ -4994,6 +5019,45 @@
     <script src="script/bg_3d_stars.js"></script>
     <script src="script/move_ai_section.js"></script>
     <script src="script/desc_toggle.js"></script>
+    <script>
+        // Panel center-zoom hover effect
+        (function () {
+            var layout = document.querySelector('.about-hologram-layout');
+            if (!layout) return;
+
+            var dim = layout.querySelector('.panel-hover-dim');
+            var panels = layout.querySelectorAll('.data-panel');
+            var activePanel = null;
+
+            panels.forEach(function (panel) {
+                panel.addEventListener('mouseenter', function () {
+                    if (activePanel && activePanel !== this) {
+                        activePanel.style.transform = '';
+                        activePanel.style.zIndex = '';
+                        activePanel.classList.remove('panel-centered');
+                    }
+
+                    var rect = this.getBoundingClientRect();
+                    var dx = window.innerWidth / 2 - (rect.left + rect.width / 2);
+                    var dy = window.innerHeight / 2 - (rect.top + rect.height / 2);
+
+                    this.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(1.15)';
+                    this.style.zIndex = '100';
+                    this.classList.add('panel-centered');
+                    dim.classList.add('active');
+                    activePanel = this;
+                });
+
+                panel.addEventListener('mouseleave', function () {
+                    this.style.transform = '';
+                    this.style.zIndex = '';
+                    this.classList.remove('panel-centered');
+                    dim.classList.remove('active');
+                    activePanel = null;
+                });
+            });
+        })();
+    </script>
 </body>
 
 </html>
