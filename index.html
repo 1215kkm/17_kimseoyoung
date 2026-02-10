@@ -3012,6 +3012,11 @@
                             opacity: 1;
                         }
 
+                        /* 딤 활성화 시 캐릭터를 딤 위로 */
+                        .panel-hover-dim.active ~ .avatar-center-stage {
+                            z-index: 70;
+                        }
+
                         .data-panel.panel-centered {
                             border-color: #fff !important;
                             box-shadow: 0 0 50px rgba(255, 255, 255, 0.3) !important;
