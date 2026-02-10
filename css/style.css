@@ -88,6 +88,7 @@ body {
     /* [핵심] 화면 양옆 여백을 2.5vw로 고정 (너비 95vw) */
     width: 95vw;
     height: 90vh;
+    height: 90dvh;
 
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -250,6 +251,7 @@ body {
     width: 95vw;
     /* 메인 페이지의 여백과 동일하게 설정 */
     height: 90vh;
+    height: 90dvh;
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
