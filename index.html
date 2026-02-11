@@ -895,6 +895,9 @@
                 padding: clamp(10px, 4vw, 40px);
                 justify-content: flex-start;
                 overflow-y: auto;
+                position: relative;
+                top: auto; 
+                transform: translateY(0);
             }
 
             .avatar-center-stage {
@@ -2493,7 +2496,7 @@
                 grid-template-columns: 420px auto 420px;
                 grid-template-rows: max-content max-content;
                 justify-content: center;
-                gap: clamp(20px, 3.5vh, 40px);
+                gap: clamp(10px, 1.5vh, 20px);
                 /* Optimized spacing */
 
                 /* SCROLL ENGINE REMOVED */
@@ -2508,6 +2511,9 @@
                 padding: 2.5vh 40px;
                 /* Balanced vertical padding */
                 box-sizing: border-box;
+                position: absolute;
+                top: 50%; 
+                transform: translateY(-50%);
 
                 /* Hide Scrollbar for Chrome/Safari/Opera (Optional clean look) */
                 &::-webkit-scrollbar {
@@ -2550,7 +2556,7 @@
                 flex-direction: column;
                 justify-content: flex-start;
                 /* Content starts at top */
-                padding: 25px 35px !important;
+                padding: 15px 25px !important;
                 /* Comfortable padding */
             }
 
@@ -2793,7 +2799,7 @@
                         /* Reveal Animation Base - DISABLED (Always Visible) */
                         .data-panel {
                             opacity: 1;
-                            transform: none;
+                            transform: scale(1);
                             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                             /* Keep hover transition */
                         }
@@ -4935,6 +4941,14 @@
         </div>
     </div>
 
+    <style>
+        .holo-avatar-img {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 0.3s ease;
+}
+    </style>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
     <script>
@@ -5097,6 +5111,8 @@
             }
         })();
     </script>
+
+
 </body>
 
 </html>
