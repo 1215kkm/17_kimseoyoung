@@ -51,7 +51,7 @@ new fullpage('#fullpage', {
 
     // [중요] 특정 요소 내부에서만 스크롤이 작동하게 하려면 여기 등록하여 
     // fullpage.js가 이 영역의 이벤트를 하이재킹하지 않도록 합니다.
-    normalScrollElements: '.about-hologram-layout, .graphic-archive-wrapper, .terminal-content',
+    normalScrollElements: '.graphic-archive-wrapper, .terminal-content',
 
 
     fitToSection: true,
@@ -696,7 +696,6 @@ function triggerNextFileActivation() {
 document.addEventListener('DOMContentLoaded', () => {
     // 제어할 컨테이너 목록
     const scrollContainers = [
-        '.about-hologram-layout',
         '.graphic-archive-wrapper',
         '.terminal-content'
     ];
@@ -736,4 +735,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, { passive: false });
     });
+});
+
+
+const avatar = document.querySelector('.avatar-center-stage .holo-avatar-img');
+
+function setAvatar(src) {
+  avatar.src = src;
+}
+
+function resetAvatar() {
+  avatar.src = 'images/profile2.png';
+}
+
+// panel-tr
+document.querySelectorAll('.panel-tr').forEach(el => {
+  el.addEventListener('mouseover', () => setAvatar('images/profile3.png'));
+  el.addEventListener('mouseout', resetAvatar);
+});
+
+// panel-br
+document.querySelectorAll('.panel-br').forEach(el => {
+  el.addEventListener('mouseover', () => setAvatar('images/profile4.png'));
+  el.addEventListener('mouseout', resetAvatar);
+});
+
+// panel-tl
+document.querySelectorAll('.panel-tl').forEach(el => {
+  el.addEventListener('mouseover', () => setAvatar('images/profile5.png'));
+  el.addEventListener('mouseout', resetAvatar);
+});
+
+// panel-tb
+document.querySelectorAll('.panel-bl').forEach(el => {
+  el.addEventListener('mouseover', () => setAvatar('images/profile6.png'));
+  el.addEventListener('mouseout', resetAvatar);
 });
